@@ -1,0 +1,4 @@
+# Files to install for kfreebsd systems
+bin/kill bin
+bin/ps bin
+bin/* /usr/bin

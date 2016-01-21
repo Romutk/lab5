@@ -1,0 +1,23 @@
+Description: Fix main cached calculation
+ Main cached used to be page cache + slab in fact the
+ second item should be slab reclaimable as the point of this
+ item is to show potiential available memory.
+ Many thanks to Omega Phil for hunting this one down
+Author: Craig Small <csmall@debian.org>
+Origin: upstream
+Bug-Debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=799716
+Applied-Upstream: https://gitlab.com/procps-ng/procps/commit/05d751c4f076a2f0118b914c5e51cfbb4762ad8e
+Last-Update: 2016-01-03
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- a/proc/sysinfo.c
++++ b/proc/sysinfo.c
+@@ -704,7 +704,7 @@
+   if(kb_inactive==~0UL){
+     kb_inactive = kb_inact_dirty + kb_inact_clean + kb_inact_laundry;
+   }
+-  kb_main_cached = kb_page_cache + kb_slab;
++  kb_main_cached = kb_page_cache + kb_slab_reclaimable;
+   kb_swap_used = kb_swap_total - kb_swap_free;
+ 
+   /* if kb_main_available is greater than kb_main_total or our calculation of
